@@ -1,0 +1,17 @@
+class CronSanityChecker < Formula
+  desc "Catches broken/misleading cron schedules before they bite you in production, free and zero-dependency"
+  homepage "https://git.canutethegreat.com/CanuteTheGreat/cron-sanity-checker"
+  url "https://git.canutethegreat.com/CanuteTheGreat/cron-sanity-checker/archive/v1.0.0.tar.gz"
+  sha256 "fed9f76d97b1a807d44dc31b5c680e55dafd153a959d9ca6f83d28f7db963b50"
+  license "MIT"
+
+  depends_on "python@3.12"
+
+  def install
+    bin.install "cron_sanity_checker.py" => "cron-sanity-checker"
+  end
+
+  test do
+    assert_match "usage:", shell_output("#{bin}/cron-sanity-checker --help")
+  end
+end
