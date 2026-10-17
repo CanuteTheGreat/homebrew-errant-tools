@@ -1,17 +1,27 @@
 class NginxConfigAuditor < Formula
-  desc "Static analyzer for nginx config files flagging common misconfigurations, free and zero-dependency"
-  homepage "https://git.canutethegreat.com/CanuteTheGreat/nginx-config-auditor"
-  url "https://git.canutethegreat.com/CanuteTheGreat/nginx-config-auditor/archive/v1.1.0.tar.gz"
-  sha256 "93ac846786a23ed37b32b19393d46fc8b3dc0ded702d8832acbbed6f8c582c96"
+  desc "Static analyzer for nginx configs (follows includes or nginx -T) flagging common misconfigurations"
+  homepage "https://errant.solutions/tools/nginx-config-auditor.html"
+  url "https://git.canutethegreat.com/CanuteTheGreat/nginx-config-auditor/archive/v1.2.0.tar.gz"
+  sha256 "9f5dce57339a79c43f2142a037a23a1ffa350068ddd4ccb98c2f783571de9fb2"
   license "MIT"
 
-  depends_on "python@3.12"
+  depends_on "python@3.13"
 
   def install
-    bin.install "nginx_config_auditor.py" => "nginx-config-auditor"
+    libexec.install "nginx_config_auditor.py"
+    (bin/"nginx-config-auditor").write <<~SH
+      #!/bin/sh
+      exec "#{Formula["python@3.13"].opt_bin}/python3.13" "#{libexec}/nginx_config_auditor.py" "$@"
+    SH
   end
 
   test do
-    assert_match "usage:", shell_output("#{bin}/nginx-config-auditor --help")
+    assert_match version.to_s, shell_output("#{bin}/nginx-config-auditor --version")
+    (testpath/"nginx.conf").write <<~EOS
+      events {}
+      http { server { listen 8080; location / { autoindex on; } } }
+    EOS
+    output = shell_output("#{bin}/nginx-config-auditor #{testpath}/nginx.conf", 1)
+    assert_match "autoindex on", output
   end
 end

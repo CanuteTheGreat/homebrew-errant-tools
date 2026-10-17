@@ -1,18 +1,22 @@
 class DockerBaselineAuditor < Formula
-  desc "Read-only Docker security baseline checker (CIS-adjacent), free and zero-dependency"
-  homepage "https://git.canutethegreat.com/CanuteTheGreat/docker-baseline-auditor"
-  url "https://git.canutethegreat.com/CanuteTheGreat/docker-baseline-auditor/archive/v1.1.0.tar.gz"
-  sha256 "d1d5fe932d79904b64a8a9dab796e61ab1084a6cd03dfab9676c60b3183e2ea7"
+  desc "Read-only Docker host and container baseline checker with CIS Docker Benchmark ids"
+  homepage "https://errant.solutions/tools/docker-baseline-auditor.html"
+  url "https://git.canutethegreat.com/CanuteTheGreat/docker-baseline-auditor/archive/v1.2.0.tar.gz"
+  sha256 "b92974812b17fcd2e76bac724d4858eae5934e42e3b9809d887d42217b97b61e"
   license "MIT"
 
-  depends_on "python@3.12"
+  depends_on "python@3.13"
 
   def install
-    bin.install "docker-baseline-auditor.py" => "docker-baseline-auditor"
+    libexec.install "docker_baseline_auditor.py"
+    (bin/"docker-baseline-auditor").write <<~SH
+      #!/bin/sh
+      exec "#{Formula["python@3.13"].opt_bin}/python3.13" "#{libexec}/docker_baseline_auditor.py" "$@"
+    SH
   end
 
   test do
-    output = shell_output("#{bin}/docker-baseline-auditor 2>&1", 2)
-    assert_match "docker` CLI not found", output
+    assert_match version.to_s, shell_output("#{bin}/docker-baseline-auditor --version")
+    assert_match "CIS Docker Benchmark", shell_output("#{bin}/docker-baseline-auditor --help")
   end
 end

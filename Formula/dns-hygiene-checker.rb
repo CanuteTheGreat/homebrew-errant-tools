@@ -1,17 +1,23 @@
 class DnsHygieneChecker < Formula
-  desc "Find dangling DNS records (subdomain takeover setups) before an attacker does, free via DoH"
-  homepage "https://git.canutethegreat.com/CanuteTheGreat/dns-hygiene-checker"
-  url "https://git.canutethegreat.com/CanuteTheGreat/dns-hygiene-checker/archive/v1.1.0.tar.gz"
-  sha256 "80bc6d427db2930c0e2902ceb832f3472f906cf54215f64654accaa24301e627"
+  desc "Find dangling DNS records and subdomain-takeover setups, plus CAA and DNSSEC checks, via DoH"
+  homepage "https://errant.solutions/tools/dns-hygiene-checker.html"
+  url "https://git.canutethegreat.com/CanuteTheGreat/dns-hygiene-checker/archive/v1.2.0.tar.gz"
+  sha256 "5a50119d98d486e037649a9ac859180ad092cad57eed2236162601501d840a32"
   license "MIT"
 
-  depends_on "python@3.12"
+  depends_on "python@3.13"
 
   def install
-    bin.install "dns_hygiene_checker.py" => "dns-hygiene-checker"
+    libexec.install "dns_hygiene_checker.py"
+    (bin/"dns-hygiene-checker").write <<~SH
+      #!/bin/sh
+      exec "#{Formula["python@3.13"].opt_bin}/python3.13" "#{libexec}/dns_hygiene_checker.py" "$@"
+    SH
   end
 
   test do
-    assert_match "usage:", shell_output("#{bin}/dns-hygiene-checker --help")
+    assert_match version.to_s, shell_output("#{bin}/dns-hygiene-checker --version")
+    output = shell_output("#{bin}/dns-hygiene-checker --doh-url http://127.0.0.1:9/dns-query --subdomains www --no-apex-checks example.invalid 2>&1", 2)
+    assert_match "INCOMPLETE", output
   end
 end

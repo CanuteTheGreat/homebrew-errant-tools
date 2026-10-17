@@ -2,11 +2,15 @@
 """CI test for every formula in Formula/: what `brew install` + `brew test` would do,
 without needing Homebrew on the runner.
 
-For each formula it downloads the real `url`, checks `sha256`, unpacks it, installs
-each `bin.install "src" => "name"` file as an executable, and runs the formula's
-`test do` block (the `shell_output(...)`/`assert_match`/`system` forms used here,
-with the same exit-code expectations). A test block using any other construct
-fails, so every formula stays covered.
+For each formula it downloads the real `url`, checks `sha256`, unpacks it and performs
+the formula's `install` block: `libexec.install "file"`, the `(bin/"name").write <<~SH`
+wrapper (with Homebrew's Python replaced by this interpreter), and for formulae with
+`resource` blocks the private virtualenv: every resource is downloaded, its sha256
+checked and the wheels installed with `pip install --no-deps --no-index`, exactly the
+formula's own command. Then it runs the formula's `test do` block (the
+`shell_output(...)`/`assert_match`/`system` forms used here, `version.to_s` included,
+with the same exit-code expectations). An install or test line using any other
+construct fails, so every formula stays covered.
 """
 import glob
 import hashlib
@@ -38,7 +42,7 @@ def download(url):
     raise last
 
 
-def run_test_block(block, bindir, testpath):
+def run_test_block(block, bindir, testpath, version=""):
     env = dict(os.environ, PATH=bindir + os.pathsep + os.environ["PATH"])
     pending_output = None
     steps = 0
@@ -59,10 +63,11 @@ def run_test_block(block, bindir, testpath):
         if m:
             heredoc_target = m.group(1)
             continue
+        line = line.replace("assert_match version.to_s, ", 'assert_match "%s", ' % version)
         m = re.match(r'(?:(output) = |assert_match "((?:[^"\\]|\\.)*)", )?shell_output\("((?:[^"\\]|\\.)*)"(?:, (\d+))?\)$',
                      line)
         if m:
-            cmd = m.group(3).replace("#{bin}", bindir)
+            cmd = m.group(3).replace("#{bin}", bindir).replace("#{testpath}", testpath)
             want = int(m.group(4) or 0)
             p = subprocess.run(cmd, shell=True, capture_output=True, text=True, env=env, cwd=testpath, timeout=120)
             assert p.returncode == want, f"`{cmd}` exited {p.returncode}, formula expects {want}: {p.stderr[-300:]}"
@@ -91,6 +96,60 @@ def run_test_block(block, bindir, testpath):
     assert steps, "formula test block runs nothing"
 
 
+PY_PATH = '#{Formula["python@3.13"].opt_bin}/python3.13'
+VENV_STEPS = [
+    'system Formula["python@3.13"].opt_bin/"python3.13", "-m", "venv", libexec',
+    'r.fetch',
+    'whl = buildpath/File.basename(r.url)',
+    'cp r.cached_download, whl',
+    'system libexec/"bin/python", "-m", "pip", "install", "--no-deps", "--no-index", *wheels',
+]
+
+
+def install(rb, src, work, bindir):
+    """Do what the formula's install block does (only the constructs these formulae use)."""
+    body = re.search(r"^  def install\n(.*?)^  end$", rb, re.M | re.S).group(1)
+    libexec = os.path.join(work, "libexec")
+    os.makedirs(libexec)
+    python = sys.executable
+    assert 'depends_on "python@3.13"' in rb, "formula must depend on the Python its wrapper runs"
+    resources = re.findall(r'resource "([^"]+)" do\n\s+url "([^"]+)"\n\s+sha256 "([0-9a-f]{64})"\n\s+end', rb)
+    if resources:
+        for step in VENV_STEPS:
+            assert step in body, f"install block lacks `{step}`"
+        subprocess.run([python, "-m", "venv", libexec], check=True)
+        wheels = []
+        for name, url, sha in resources:
+            data = download(url)
+            assert hashlib.sha256(data).hexdigest() == sha, f"resource {name}: sha256 mismatch"
+            whl = os.path.join(work, os.path.basename(url))
+            with open(whl, "wb") as f:
+                f.write(data)
+            wheels.append(whl)
+        subprocess.run([os.path.join(libexec, "bin", "python"), "-m", "pip", "install", "-q", "--no-deps", "--no-index"]
+                       + wheels, check=True)
+    files = re.findall(r'libexec\.install "([^"]+)"', body)
+    assert files, "formula installs nothing into libexec"
+    for fname in files:
+        shutil.copy(os.path.join(src, fname), os.path.join(libexec, fname))
+    wrappers = re.findall(r'\(bin/"([^"]+)"\)\.write <<~SH\n(.*?)\n\s*SH\n', body, re.S)
+    assert wrappers, "formula writes no bin wrapper"
+    for name, text in wrappers:
+        text = "\n".join(l.strip() for l in text.splitlines())
+        text = text.replace(PY_PATH, python).replace("#{libexec}", libexec)
+        assert "#{" not in text, f"wrapper for {name} uses an interpolation the test can't reproduce: {text}"
+        dst = os.path.join(bindir, name)
+        with open(dst, "w") as f:
+            f.write(text + "\n")
+        os.chmod(dst, 0o755)
+    known = set(VENV_STEPS) | {"end", "whl", "SH", "#!/bin/sh"}
+    for line in body.splitlines():
+        l = line.strip()
+        if not l or l.startswith("#") or l in known or l.startswith(("libexec.install", "(bin/", "exec ", "wheels = ")):
+            continue
+        raise AssertionError(f"install line not understood by ci/test_formulae.py: {l!r}")
+
+
 def check(path):
     rb = open(path).read()
     url = re.search(r'^\s*url "([^"]+)"', rb, re.M).group(1)
@@ -111,17 +170,11 @@ def check(path):
         bindir, testpath = os.path.join(work, "bin"), os.path.join(work, "test")
         os.makedirs(bindir)
         os.makedirs(testpath)
-        installs = re.findall(r'bin\.install "([^"]+)" => "([^"]+)"', rb)
-        assert installs, "formula installs nothing into bin"
-        for s, name in installs:
-            dst = os.path.join(bindir, name)
-            shutil.copy(os.path.join(src, s), dst)
-            os.chmod(dst, os.stat(dst).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-            first = open(dst, "rb").readline()
-            assert first.startswith(b"#!"), f"{s} has no shebang, so the installed `{name}` can't run"
+        install(rb, src, work, bindir)
         block = re.search(r"^  test do\n(.*?)^  end$", rb, re.M | re.S)
         assert block, "formula has no test block"
-        run_test_block(block.group(1), bindir, testpath)
+        version = re.search(r"/v(\d+\.\d+\.\d+)\.tar\.gz", url).group(1)
+        run_test_block(block.group(1), bindir, testpath, version)
         return url
     finally:
         shutil.rmtree(work, ignore_errors=True)

@@ -41,11 +41,13 @@ brew install sshd-hardening-auditor
   (GitHub, Stripe, Slack, generic HMAC schemes).
 - **aws-waste-finder** — read-only AWS cost-drain scanner (unattached EBS,
   unassociated EIPs, old snapshots, NAT gateways, idle load balancers; RDS
-  instances listed for manual review). Requires `boto3` (`pip3 install boto3`) — not vendored by
-  the formula.
+  instances listed for manual review). boto3 and its dependencies are pinned in the formula and
+  installed into the formula's own virtualenv — no `pip install` needed.
 
 All tools are stdlib-only Python unless noted above, zero dependencies
-beyond `python@3.12` (and `boto3` for aws-waste-finder). Each is also
+beyond `python@3.13` (aws-waste-finder brings its own boto3). Every command
+runs with Homebrew's Python (not whatever `python3` is first on PATH) and
+supports `--version`. Each is also
 available standalone at
 `https://git.canutethegreat.com/CanuteTheGreat/<tool-name>` and is free to
 use — pay-what-you-want Stripe links are in each tool's own README if you'd
@@ -54,4 +56,7 @@ like to support development.
 ## Tests
 
 `ci/test_formulae.py` (run by CI on every push and daily) downloads every formula's
-real archive, checks its sha256, installs its `bin` entries and runs its `test do` block.
+real archive and resources, checks their sha256, performs the formula's install steps
+(libexec + wrapper, and the pinned boto3 virtualenv for aws-waste-finder) and runs its
+`test do` block, which checks `--version` and one real offline behaviour per tool.
+Changelogs and checksums for each version: the tool repo's Releases page.

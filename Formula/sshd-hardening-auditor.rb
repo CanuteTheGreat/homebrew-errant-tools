@@ -1,23 +1,27 @@
 class SshdHardeningAuditor < Formula
-  include Language::Python::Virtualenv
-
-  desc "Audit sshd_config against CIS/NIST SSH hardening recommendations"
-  homepage "https://git.canutethegreat.com/CanuteTheGreat/sshd-hardening-auditor"
-  url "https://git.canutethegreat.com/CanuteTheGreat/sshd-hardening-auditor/archive/v1.1.0.tar.gz"
-  sha256 "c6cd84a018917178fe37a664b9fd6ab52bbb586966f0ab349a27145ca66bb88b"
+  desc "Audit sshd_config, sshd -T or a live SSH server's offered algorithms against CIS/NIST SSH hardening guidance"
+  homepage "https://errant.solutions/tools/sshd-hardening-auditor.html"
+  url "https://git.canutethegreat.com/CanuteTheGreat/sshd-hardening-auditor/archive/v1.2.0.tar.gz"
+  sha256 "9e8f98bcf2eb76b1def901e8778689364d99cdb7dca5e4d9abafe89bc771e275"
   license "MIT"
 
-  depends_on "python@3.12"
+  depends_on "python@3.13"
 
   def install
-    bin.install "sshd_audit.py" => "sshd-hardening-auditor"
+    libexec.install "sshd_audit.py"
+    (bin/"sshd-hardening-auditor").write <<~SH
+      #!/bin/sh
+      exec "#{Formula["python@3.13"].opt_bin}/python3.13" "#{libexec}/sshd_audit.py" "$@"
+    SH
   end
 
   test do
+    assert_match version.to_s, shell_output("#{bin}/sshd-hardening-auditor --version")
     (testpath/"sshd_config").write <<~EOS
-      PermitRootLogin no
+      PermitRootLogin yes
       PasswordAuthentication no
     EOS
-    system "#{bin}/sshd-hardening-auditor", testpath/"sshd_config"
+    output = shell_output("#{bin}/sshd-hardening-auditor --no-file-checks #{testpath}/sshd_config", 1)
+    assert_match "[HIGH] PermitRootLogin = yes", output
   end
 end
