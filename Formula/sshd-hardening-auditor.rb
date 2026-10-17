@@ -3,8 +3,8 @@ class SshdHardeningAuditor < Formula
 
   desc "Audit sshd_config against CIS/NIST SSH hardening recommendations"
   homepage "https://git.canutethegreat.com/CanuteTheGreat/sshd-hardening-auditor"
-  url "https://git.canutethegreat.com/CanuteTheGreat/sshd-hardening-auditor/archive/v1.0.0.tar.gz"
-  sha256 "45f6877ed9f2baff4057d57544e6c015dfdac11e181ccd52032b6489bf1826fa"
+  url "https://git.canutethegreat.com/CanuteTheGreat/sshd-hardening-auditor/archive/v1.1.0.tar.gz"
+  sha256 "c6cd84a018917178fe37a664b9fd6ab52bbb586966f0ab349a27145ca66bb88b"
   license "MIT"
 
   depends_on "python@3.12"

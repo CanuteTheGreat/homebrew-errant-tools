@@ -40,8 +40,8 @@ brew install sshd-hardening-auditor
 - **webhook-sig-verifier** — verifies/debugs webhook HMAC signatures
   (GitHub, Stripe, Slack, generic HMAC schemes).
 - **aws-waste-finder** — read-only AWS cost-drain scanner (unattached EBS,
-  unassociated EIPs, old snapshots, NAT gateways, idle load balancers,
-  oversized RDS). Requires `boto3` (`pip3 install boto3`) — not vendored by
+  unassociated EIPs, old snapshots, NAT gateways, idle load balancers; RDS
+  instances listed for manual review). Requires `boto3` (`pip3 install boto3`) — not vendored by
   the formula.
 
 All tools are stdlib-only Python unless noted above, zero dependencies
@@ -50,3 +50,8 @@ available standalone at
 `https://git.canutethegreat.com/CanuteTheGreat/<tool-name>` and is free to
 use — pay-what-you-want Stripe links are in each tool's own README if you'd
 like to support development.
+
+## Tests
+
+`ci/test_formulae.py` (run by CI on every push and daily) downloads every formula's
+real archive, checks its sha256, installs its `bin` entries and runs its `test do` block.

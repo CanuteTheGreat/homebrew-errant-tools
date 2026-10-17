@@ -1,8 +1,8 @@
 class JsonSchemaDiff < Formula
   desc "Classify JSON Schema changes as BREAKING, compatible, or info-only for API versioning"
   homepage "https://git.canutethegreat.com/CanuteTheGreat/json-schema-diff"
-  url "https://git.canutethegreat.com/CanuteTheGreat/json-schema-diff/archive/v1.0.0.tar.gz"
-  sha256 "a93ac1adcf03b6739d040af5041fc7ba67b7d90f53331ed8fd7edd49b6fa46e6"
+  url "https://git.canutethegreat.com/CanuteTheGreat/json-schema-diff/archive/v1.1.0.tar.gz"
+  sha256 "e17ce0ba6f6f62e13fc96bc8f8a350705ed1a128585e53f12e56c50763915198"
   license "MIT"
 
   depends_on "python@3.12"

@@ -1,8 +1,8 @@
 class MailSecurityAuditor < Formula
   desc "Audit a domain's SPF/DKIM/DMARC/MX email authentication hygiene, free and zero-dependency"
   homepage "https://git.canutethegreat.com/CanuteTheGreat/mail-security-auditor"
-  url "https://git.canutethegreat.com/CanuteTheGreat/mail-security-auditor/archive/v1.0.0.tar.gz"
-  sha256 "968db4c8ec288f1c9976f2c9d6e8a3e152126f8b53720ba07483edce5bbd1d79"
+  url "https://git.canutethegreat.com/CanuteTheGreat/mail-security-auditor/archive/v1.1.0.tar.gz"
+  sha256 "d04df73813e47e76cd4445f3a34640d3d026097eb456b4bba95f7afad5ff7879"
   license "MIT"
 
   depends_on "python@3.12"

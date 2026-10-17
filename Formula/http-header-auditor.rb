@@ -1,8 +1,8 @@
 class HttpHeaderAuditor < Formula
   desc "Live HTTP security header scanner (HSTS/CSP/cookies/etc), free and zero-dependency"
   homepage "https://git.canutethegreat.com/CanuteTheGreat/http-header-auditor"
-  url "https://git.canutethegreat.com/CanuteTheGreat/http-header-auditor/archive/v1.0.0.tar.gz"
-  sha256 "16906a465b003a5c4a727b83527036955e8a2a324fba47462508d09452fd6b5d"
+  url "https://git.canutethegreat.com/CanuteTheGreat/http-header-auditor/archive/v1.1.0.tar.gz"
+  sha256 "0c63c52a8ff5b838b5542c04eb7776c6a858ba7a70417651efb47b35065c1147"
   license "MIT"
 
   depends_on "python@3.12"
