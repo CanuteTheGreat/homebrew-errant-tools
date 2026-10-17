@@ -1,8 +1,8 @@
 class SecurityTxtAuditor < Formula
   desc "Audit robots.txt and security.txt (RFC 9116) for missing, expired or misconfigured fields"
   homepage "https://errant.solutions/tools/security-txt-auditor.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/security-txt-auditor/archive/v1.2.0.tar.gz"
-  sha256 "71cf73ade1d02c5c7fc25238b88c8c2592680aa9daf95b80ff3b5170002678a2"
+  url "https://git.canutethegreat.com/CanuteTheGreat/security-txt-auditor/archive/v1.2.1.tar.gz"
+  sha256 "32db983941d31fd2fbe4056de0a4c87be776b91a984a8dce31935c103c92930d"
   license "MIT"
 
   depends_on "python@3.13"

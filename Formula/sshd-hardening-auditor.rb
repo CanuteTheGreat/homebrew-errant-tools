@@ -1,8 +1,8 @@
 class SshdHardeningAuditor < Formula
   desc "Audit sshd_config, sshd -T or a live SSH server's offered algorithms against CIS/NIST SSH hardening guidance"
   homepage "https://errant.solutions/tools/sshd-hardening-auditor.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/sshd-hardening-auditor/archive/v1.2.0.tar.gz"
-  sha256 "9e8f98bcf2eb76b1def901e8778689364d99cdb7dca5e4d9abafe89bc771e275"
+  url "https://git.canutethegreat.com/CanuteTheGreat/sshd-hardening-auditor/archive/v1.2.1.tar.gz"
+  sha256 "5212f06d86c08a97a1eec91dae47815413c9b86def508c5b37d43a2ff8983ca3"
   license "MIT"
 
   depends_on "python@3.13"

@@ -1,8 +1,8 @@
 class CertTransparencyWatcher < Formula
   desc "Watch Certificate Transparency logs for new certificates, unexpected issuers and subdomains"
   homepage "https://errant.solutions/tools/cert-transparency-watcher.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/cert-transparency-watcher/archive/v1.2.0.tar.gz"
-  sha256 "d9735def085aa46370d05a271e06fdf37618a7fe047495120f5f5be62e3262c4"
+  url "https://git.canutethegreat.com/CanuteTheGreat/cert-transparency-watcher/archive/v1.2.1.tar.gz"
+  sha256 "9a3664bf9812e6bc694784656f90b16615d5448165a4439c6ef8bb3aad8ec60d"
   license "MIT"
 
   depends_on "python@3.13"
