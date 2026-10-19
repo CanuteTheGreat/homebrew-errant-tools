@@ -1,8 +1,8 @@
 class MailSecurityAuditor < Formula
   desc "Audit a domain's SPF (10-lookup limit), DKIM, DMARC, MTA-STS, TLS-RPT, BIMI and MX email security"
   homepage "https://errant.solutions/tools/mail-security-auditor.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/mail-security-auditor/archive/v1.2.0.tar.gz"
-  sha256 "181a98bc454f01ace9d9f339e0fa993d2d8bab3c6aa23fd54ecc910a54b5a6a6"
+  url "https://git.canutethegreat.com/CanuteTheGreat/mail-security-auditor/archive/v1.2.1.tar.gz"
+  sha256 "0e4b7f0acf5a8851c2d01190daf2da359add847f87997bd15efa9f87a9dd950b"
   license "MIT"
 
   depends_on "python@3.13"
