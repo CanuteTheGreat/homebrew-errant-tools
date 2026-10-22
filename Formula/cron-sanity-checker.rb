@@ -1,8 +1,8 @@
 class CronSanityChecker < Formula
   desc "Lint cron schedules: impossible dates, typos, DOM/DOW OR gotcha, DST gaps, plain-English descriptions"
   homepage "https://errant.solutions/tools/cron-sanity-checker.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/cron-sanity-checker/archive/v1.2.1.tar.gz"
-  sha256 "0d8f2f1a336b874f35f8677d1e13c50d4c75033b680c82812e1168ef27ef0d58"
+  url "https://github.com/CanuteTheGreat/cron-sanity-checker/archive/refs/tags/v1.2.1.tar.gz"
+  sha256 "e0010a41158da86cd6fef003991df32a48321420cbeb73eceee031cce6d58585"
   license "MIT"
 
   depends_on "python@3.13"

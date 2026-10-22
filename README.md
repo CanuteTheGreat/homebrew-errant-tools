@@ -6,7 +6,7 @@ Homebrew tap for free, zero-dependency security/ops CLI tools from
 ## Install
 
 ```sh
-brew tap canutethegreat/errant-tools https://git.canutethegreat.com/CanuteTheGreat/homebrew-errant-tools
+brew tap canutethegreat/errant-tools
 brew install sshd-hardening-auditor
 ```
 
@@ -49,7 +49,7 @@ beyond `python@3.13` (aws-waste-finder brings its own boto3). Every command
 runs with Homebrew's Python (not whatever `python3` is first on PATH) and
 supports `--version`. Each is also
 available standalone at
-`https://git.canutethegreat.com/CanuteTheGreat/<tool-name>` and is free to
+`https://github.com/CanuteTheGreat/<tool-name>` and is free to
 use — pay-what-you-want Stripe links are in each tool's own README if you'd
 like to support development.
 

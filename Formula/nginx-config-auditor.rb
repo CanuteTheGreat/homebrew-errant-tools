@@ -1,8 +1,8 @@
 class NginxConfigAuditor < Formula
   desc "Static analyzer for nginx configs (follows includes or nginx -T) flagging common misconfigurations"
   homepage "https://errant.solutions/tools/nginx-config-auditor.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/nginx-config-auditor/archive/v1.2.1.tar.gz"
-  sha256 "9c838406ce30883273a2f8ac038b945e806746a8f03be8634e19444258243ff0"
+  url "https://github.com/CanuteTheGreat/nginx-config-auditor/archive/refs/tags/v1.2.1.tar.gz"
+  sha256 "38974d16e4cf4e803e25d3f3269015c97634d907fd5552b7f9dde1261407169c"
   license "MIT"
 
   depends_on "python@3.13"

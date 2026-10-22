@@ -1,8 +1,8 @@
 class HttpHeaderAuditor < Formula
   desc "Live HTTP security header scanner with an A+ to F grade (HSTS, CSP, cookies, CORS, COOP/CORP, SRI)"
   homepage "https://errant.solutions/tools/http-header-auditor.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/http-header-auditor/archive/v1.2.1.tar.gz"
-  sha256 "2917aae6c356e0234a219e011e5dd14b5232fd661ce8362cfdf200f72296efbd"
+  url "https://github.com/CanuteTheGreat/http-header-auditor/archive/refs/tags/v1.2.1.tar.gz"
+  sha256 "d4c8cf3f40b7885f628badd647ed19cddd037957c0bd5dc48cc283133d230396"
   license "MIT"
 
   depends_on "python@3.13"

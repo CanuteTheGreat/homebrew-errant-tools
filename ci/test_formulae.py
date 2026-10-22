@@ -36,7 +36,7 @@ def download(url):
         try:
             with urllib.request.urlopen(url, timeout=90) as r:
                 return r.read()
-        except Exception as e:  # Forgejo builds archives on first request
+        except Exception as e:  # archive downloads can fail transiently
             last = e
             time.sleep(5)
     raise last

@@ -1,8 +1,8 @@
 class DockerBaselineAuditor < Formula
   desc "Read-only Docker host and container baseline checker with CIS Docker Benchmark ids"
   homepage "https://errant.solutions/tools/docker-baseline-auditor.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/docker-baseline-auditor/archive/v1.2.1.tar.gz"
-  sha256 "c9aed7f634b9bfd8698920bc493ae11cdf235769e55b782509d9a2b91afb80ac"
+  url "https://github.com/CanuteTheGreat/docker-baseline-auditor/archive/refs/tags/v1.2.1.tar.gz"
+  sha256 "53b4409c171c174bd24c4716f39bc29979f751d32b796a31d31f6eba89f065c7"
   license "MIT"
 
   depends_on "python@3.13"

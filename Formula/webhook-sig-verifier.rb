@@ -1,8 +1,8 @@
 class WebhookSigVerifier < Formula
   desc "Verify and debug webhook signatures: GitHub, Stripe, Slack, Shopify, Standard Webhooks and generic HMAC"
   homepage "https://errant.solutions/tools/webhook-sig-verifier.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/webhook-sig-verifier/archive/v1.2.0.tar.gz"
-  sha256 "3924312b0036bcc58e7e9267ba71dc5967984d28faa21de23b603a0d0d6e4c3f"
+  url "https://github.com/CanuteTheGreat/webhook-sig-verifier/archive/refs/tags/v1.2.0.tar.gz"
+  sha256 "e10a2fa34640fa27d1646e68c2b6136b116c6b3c3c161e1fbb9db52efa4d5c9a"
   license "MIT"
 
   depends_on "python@3.13"

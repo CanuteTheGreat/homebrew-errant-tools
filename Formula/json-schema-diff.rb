@@ -1,8 +1,8 @@
 class JsonSchemaDiff < Formula
   desc "Classify JSON Schema and OpenAPI changes as breaking, compatible or informational for CI gates"
   homepage "https://errant.solutions/tools/json-schema-diff.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/json-schema-diff/archive/v1.3.0.tar.gz"
-  sha256 "d8bd45c805a79a8e41645af4d8cba6d9127a0afa8dec88dc07f19b3748e386d9"
+  url "https://github.com/CanuteTheGreat/json-schema-diff/archive/refs/tags/v1.3.0.tar.gz"
+  sha256 "2ce6257b60ab2f35a2b13d633783d34f49e89b47874878589232f6fbfed1609e"
   license "MIT"
 
   depends_on "python@3.13"

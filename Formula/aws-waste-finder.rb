@@ -1,8 +1,8 @@
 class AwsWasteFinder < Formula
   desc "Read-only AWS cost-drain scanner across regions with estimated monthly savings"
   homepage "https://errant.solutions/tools/aws-waste-finder.html"
-  url "https://git.canutethegreat.com/CanuteTheGreat/aws-waste-finder/archive/v1.2.1.tar.gz"
-  sha256 "76a509998ed240f69574055d1ba927724218ac8ca9ea765de21717ab50706db1"
+  url "https://github.com/CanuteTheGreat/aws-waste-finder/archive/refs/tags/v1.2.1.tar.gz"
+  sha256 "2a415964004a46780726aa0ed17a4a0195f50454d0869e6be6571b35f0134045"
   license "MIT"
 
   depends_on "python@3.13"
