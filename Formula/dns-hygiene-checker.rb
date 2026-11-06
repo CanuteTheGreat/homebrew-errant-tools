@@ -1,8 +1,8 @@
 class DnsHygieneChecker < Formula
   desc "Find dangling DNS records and subdomain-takeover setups, plus CAA and DNSSEC checks, via DoH"
   homepage "https://errant.solutions/tools/dns-hygiene-checker.html"
-  url "https://github.com/CanuteTheGreat/dns-hygiene-checker/archive/refs/tags/v1.3.0.tar.gz"
-  sha256 "aeda4cec2089337fa2235200db24cb936049b00059aa9cd46cf0e0489fd1a920"
+  url "https://github.com/CanuteTheGreat/dns-hygiene-checker/archive/refs/tags/v1.3.1.tar.gz"
+  sha256 "af4b45f7eadbedce3aa7ab29fbd1bcfccef1d07cb25cd8b68c5de681dbe79b40"
   license "MIT"
 
   depends_on "python@3.13"
