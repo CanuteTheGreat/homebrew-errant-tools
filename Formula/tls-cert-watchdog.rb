@@ -1,8 +1,8 @@
 class TlsCertWatchdog < Formula
   desc "Check TLS certificate expiry, chain, key size and offered protocol versions, including STARTTLS services"
   homepage "https://errant.solutions/tools/tls-cert-watchdog.html"
-  url "https://github.com/CanuteTheGreat/tls-cert-watchdog/archive/refs/tags/v1.2.0.tar.gz"
-  sha256 "6a7dd9507da210c833713e656b9f987344ded5532b38c633d9fbc9f0b1098cdc"
+  url "https://github.com/CanuteTheGreat/tls-cert-watchdog/archive/refs/tags/v1.3.0.tar.gz"
+  sha256 "d0820d39dbe5d7da9a09efd3263b9c2d587cf674719b3060c7d63d01309aa687"
   license "MIT"
 
   depends_on "python@3.13"
