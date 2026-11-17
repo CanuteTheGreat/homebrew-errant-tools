@@ -30,15 +30,24 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FORMULAE = sorted(glob.glob(os.path.join(os.path.dirname(HERE), "Formula", "*.rb")))
 
 
-def download(url):
+def download(url, sha=None):
+    """Fetch url. With sha, also retry while the body hash differs: GitHub
+    can briefly serve a different archive right after a tag is pushed (seen
+    2026-11-17 on a fresh tag); the sha assertion stays and fails for real
+    once the retries are exhausted."""
     last = None
+    data = None
     for _ in range(6):
         try:
             with urllib.request.urlopen(url, timeout=90) as r:
-                return r.read()
+                data = r.read()
+            if sha is None or hashlib.sha256(data).hexdigest() == sha:
+                return data
         except Exception as e:  # archive downloads can fail transiently
             last = e
-            time.sleep(5)
+        time.sleep(10)
+    if data is not None:
+        return data
     raise last
 
 
@@ -120,7 +129,7 @@ def install(rb, src, work, bindir):
         subprocess.run([python, "-m", "venv", libexec], check=True)
         wheels = []
         for name, url, sha in resources:
-            data = download(url)
+            data = download(url, sha)
             assert hashlib.sha256(data).hexdigest() == sha, f"resource {name}: sha256 mismatch"
             whl = os.path.join(work, os.path.basename(url))
             with open(whl, "wb") as f:
@@ -154,7 +163,7 @@ def check(path):
     rb = open(path).read()
     url = re.search(r'^\s*url "([^"]+)"', rb, re.M).group(1)
     sha = re.search(r'^\s*sha256 "([0-9a-f]{64})"', rb, re.M).group(1)
-    data = download(url)
+    data = download(url, sha)
     got = hashlib.sha256(data).hexdigest()
     assert got == sha, f"sha256 mismatch for {url}: formula {sha}, actual {got}"
     work = tempfile.mkdtemp()
